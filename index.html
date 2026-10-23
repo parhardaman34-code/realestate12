@@ -1,0 +1,1831 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MAKKAR REAL ESTATE | Premium Commercial & Luxury Properties (09877600523)</title>
+  
+  <!-- Preconnect & Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Three.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- GSAP & ScrollTrigger CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            cinzel: ['"Cinzel"', 'serif'],
+          },
+          colors: {
+            brand: {
+              50: '#FAF8F5',
+              100: '#F3EFEA',
+              200: '#E6DFD5',
+              300: '#D5C7B5',
+              400: '#C4AE93',
+              500: '#B6925B', // Warm champagne gold
+              600: '#9E7A43',
+              700: '#7E5F31',
+              800: '#4D3B20',
+              900: '#141416', // Obsidian black
+              950: '#0B0C0E'  // Deep night
+            }
+          },
+          letterSpacing: {
+            widest: '.2em',
+            superwide: '.3em'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Luxury Styling & Animations */
+    :root {
+      --gold-gradient: linear-gradient(135deg, #DFBA73 0%, #C5A059 50%, #9E7A43 100%);
+    }
+
+    body {
+      background-color: #0B0C0E;
+      color: #E6DFD5;
+      overflow-x: hidden;
+    }
+
+    /* Selection */
+    ::selection {
+      background-color: #B6925B;
+      color: #0B0C0E;
+    }
+
+    /* Glassmorphism */
+    .glass-dark {
+      background: rgba(14, 16, 20, 0.78);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-light {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+    .glass-card-dark {
+      background: linear-gradient(180deg, rgba(24, 27, 33, 0.82) 0%, rgba(14, 16, 20, 0.95) 100%);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(182, 146, 91, 0.15);
+    }
+
+    /* Hero Vignette */
+    .hero-vignette {
+      background: radial-gradient(circle at center, rgba(11, 12, 14, 0.15) 0%, rgba(11, 12, 14, 0.75) 75%, rgba(11, 12, 14, 0.95) 100%),
+                  linear-gradient(180deg, rgba(11, 12, 14, 0.35) 0%, rgba(11, 12, 14, 0.85) 100%);
+    }
+
+    /* Gold text shine */
+    .text-gold-gradient {
+      background: linear-gradient(135deg, #F3EFEA 0%, #D5C7B5 40%, #B6925B 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Subtle magnetic hover on cards */
+    .property-card-lift {
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease;
+    }
+    .property-card-lift:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.7), 0 0 24px -4px rgba(182, 146, 91, 0.2);
+      border-color: rgba(182, 146, 91, 0.45);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0B0C0E;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #252830;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #B6925B;
+    }
+
+    /* Looping Mouse Scroll Indicator */
+    @keyframes mouseScroll {
+      0% { opacity: 0; transform: translateY(0); }
+      40% { opacity: 1; }
+      80% { opacity: 0; transform: translateY(12px); }
+      100% { opacity: 0; transform: translateY(12px); }
+    }
+    .scroll-wheel {
+      animation: mouseScroll 2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+    }
+
+    /* Cinematic Doorway Portal Transitions */
+    .doorway-perspective {
+      perspective: 1200px;
+      transform-style: preserve-3d;
+    }
+
+    /* Floating light dust particles */
+    @keyframes floatParticle {
+      0% { transform: translateY(0) translateX(0); opacity: 0; }
+      50% { opacity: 0.8; }
+      100% { transform: translateY(-80px) translateX(20px); opacity: 0; }
+    }
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(223, 186, 115, 0.5);
+      pointer-events: none;
+      animation: floatParticle 8s infinite ease-in-out;
+    }
+
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-brand-500 selection:text-brand-950">
+
+  <!-- ============================================================ -->
+  <!-- 1. NAVIGATION BAR -->
+  <!-- ============================================================ -->
+  <header id="main-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 py-6 px-4 sm:px-8">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      
+      <!-- Logo -->
+      <a href="#" class="flex items-center gap-3.5 group z-20">
+        <div class="w-11 h-11 rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 p-[1px] shadow-lg transition-transform duration-500 group-hover:scale-105">
+          <div class="w-full h-full bg-brand-950 rounded-[7px] flex items-center justify-center">
+            <span class="font-cinzel text-brand-400 font-bold text-xl tracking-wider">M</span>
+          </div>
+        </div>
+        <div class="flex flex-col">
+          <span class="font-cinzel text-xl font-bold tracking-[0.25em] text-white transition-colors duration-300 group-hover:text-brand-400">MAKKAR</span>
+          <span class="text-[9px] tracking-[0.35em] text-brand-400/90 font-medium uppercase -mt-1">REAL ESTATE</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Menu -->
+      <nav class="hidden lg:flex items-center space-x-10 text-xs uppercase tracking-widest font-medium text-gray-300">
+        <a href="#properties" class="nav-link relative py-1 hover:text-white transition-colors duration-300">
+          Residences
+          <span class="nav-indicator absolute bottom-0 left-0 w-0 h-[2px] bg-brand-500 transition-all duration-300"></span>
+        </a>
+        <a href="#philosophy" class="nav-link relative py-1 hover:text-white transition-colors duration-300">
+          Architecture
+          <span class="nav-indicator absolute bottom-0 left-0 w-0 h-[2px] bg-brand-500 transition-all duration-300"></span>
+        </a>
+        <a href="#services" class="nav-link relative py-1 hover:text-white transition-colors duration-300">
+          Private Advisory
+          <span class="nav-indicator absolute bottom-0 left-0 w-0 h-[2px] bg-brand-500 transition-all duration-300"></span>
+        </a>
+        <a href="#contact" class="nav-link relative py-1 hover:text-white transition-colors duration-300">
+          Concierge
+          <span class="nav-indicator absolute bottom-0 left-0 w-0 h-[2px] bg-brand-500 transition-all duration-300"></span>
+        </a>
+      </nav>
+
+      <!-- Right CTAs & Contact -->
+      <div class="hidden sm:flex items-center gap-4 z-20">
+        <a href="https://wa.me/919877600523" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/25 text-xs font-semibold tracking-wider transition-all duration-300 shadow-md">
+          <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.159.57 4.184 1.564 5.938l-1.564 5.719 5.873-1.54c1.707.957 3.676 1.503 5.772 1.503 6.627 0 12-5.373 12-12 0-6.627-5.373-12-12-12z"/></svg>
+          WhatsApp
+        </a>
+        <a href="tel:09877600523" class="hidden xl:flex items-center text-xs tracking-wider font-semibold text-gray-200 hover:text-brand-400 transition-colors">
+          <svg class="w-3.5 h-3.5 mr-2 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+          098776 00523
+        </a>
+        <a href="#contact" class="relative group overflow-hidden rounded-full p-[1px] focus:outline-none">
+          <span class="absolute inset-0 bg-gradient-to-r from-brand-500 via-brand-300 to-brand-600 rounded-full transition-transform duration-500 group-hover:scale-105"></span>
+          <span class="relative flex items-center gap-2 px-6 py-2.5 rounded-full bg-brand-950 text-white text-xs uppercase tracking-widest font-semibold transition-colors duration-300 group-hover:bg-opacity-80">
+            Book Private Tour
+            <svg class="w-3 h-3 text-brand-400 transform transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </span>
+        </a>
+      </div>
+
+      <!-- Mobile Hamburger Button -->
+      <button id="mobile-menu-btn" class="lg:hidden z-30 p-2.5 rounded-lg text-gray-200 hover:text-brand-400 focus:outline-none" aria-label="Toggle navigation">
+        <svg id="menu-icon-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <svg id="menu-icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobile-menu" class="fixed inset-0 bg-brand-950/98 backdrop-blur-2xl z-20 flex flex-col justify-center items-center opacity-0 pointer-events-none transition-all duration-500 lg:hidden px-8 text-center">
+      <div class="space-y-6 text-lg font-cinzel tracking-widest text-white">
+        <div><a href="#properties" class="mobile-nav-link block py-2 hover:text-brand-400 transition">Featured Residences</a></div>
+        <div><a href="#philosophy" class="mobile-nav-link block py-2 hover:text-brand-400 transition">Architectural Vision</a></div>
+        <div><a href="#services" class="mobile-nav-link block py-2 hover:text-brand-400 transition">Private Advisory</a></div>
+        <div><a href="#contact" class="mobile-nav-link block py-2 hover:text-brand-400 transition">Client Concierge</a></div>
+      </div>
+      <div class="mt-10 pt-8 border-t border-white/10 w-full max-w-xs space-y-4">
+        <a href="tel:09877600523" class="block text-sm text-brand-400 tracking-wider font-mono font-bold">Call: 098776 00523</a>
+        <a href="https://wa.me/919877600523" target="_blank" rel="noopener noreferrer" class="block w-full py-2.5 rounded-full bg-emerald-600/20 border border-emerald-500/40 text-emerald-400 font-bold uppercase tracking-wider text-xs">Chat on WhatsApp</a>
+        <a href="#contact" class="mobile-nav-link block w-full py-3 rounded-full bg-brand-500 text-brand-950 font-bold uppercase tracking-wider text-xs">Book Confidential Tour</a>
+      </div>
+    </div>
+  </header>
+
+
+  <!-- ============================================================ -->
+  <!-- 2. CINEMATIC SKY-TO-HOME HERO SECTION -->
+  <!-- ============================================================ -->
+  <section id="hero-section" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-24 pb-20">
+    
+    <!-- Camera Viewport Layer Stack -->
+    <div id="camera-stage" class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+      
+      <!-- LAYER 1: Exterior Sky & Drone Flight Video -->
+      <div id="aerial-flight-layer" class="absolute inset-0 w-full h-full transition-opacity duration-1000">
+        <video id="drone-video" src="drone-entrance.mp4" playsinline muted preload="auto" class="w-full h-full object-cover transform scale-105 transition-transform duration-700 ease-out"></video>
+        <!-- Fallback static hero image if video is loading or unsupported -->
+        <div id="hero-static-fallback" class="absolute inset-0 w-full h-full bg-cover bg-center -z-10" style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2600&q=85');"></div>
+      </div>
+
+      <!-- LAYER 2: Doorway Penetration & Entrance Occlusion Portal (Scene 4) -->
+      <div id="doorway-portal" class="doorway-perspective absolute inset-0 z-10 flex items-center justify-center pointer-events-none opacity-0 transition-opacity duration-300">
+        <!-- Double doorframe architectural mask that expands past screen -->
+        <div id="doorway-frame" class="relative w-[340px] sm:w-[520px] h-[460px] sm:h-[680px] border-[14px] border-[#181a1f] shadow-[0_0_120px_rgba(0,0,0,0.95)] rounded-t-full overflow-hidden transform scale-95 transition-all duration-700">
+          <div class="absolute inset-0 bg-gradient-to-b from-brand-950/60 via-transparent to-brand-950/80"></div>
+          <!-- Left and right entrance doors parting open -->
+          <div id="door-left" class="absolute top-0 left-0 w-1/2 h-full bg-[#121418] border-r border-brand-500/30 transform origin-left transition-transform duration-700"></div>
+          <div id="door-right" class="absolute top-0 right-0 w-1/2 h-full bg-[#121418] border-l border-brand-500/30 transform origin-right transition-transform duration-700"></div>
+          <!-- Warm interior light beam escaping through threshold -->
+          <div class="absolute inset-0 bg-gradient-to-t from-brand-500/20 via-brand-400/10 to-transparent"></div>
+        </div>
+      </div>
+
+      <!-- LAYER 3: Settled Interior Luxury Living Room (Scene 4 & 5) -->
+      <div id="interior-living-room" class="absolute inset-0 w-full h-full z-0 bg-cover bg-center opacity-0 scale-110 transition-all duration-1000 ease-out" style="background-image: url('https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=2600&q=85');">
+        <!-- Floating ambient gold dust particles in interior sunlight -->
+        <div class="particle w-2 h-2 top-[30%] left-[25%]"></div>
+        <div class="particle w-3 h-3 top-[45%] left-[65%]" style="animation-delay: 2s;"></div>
+        <div class="particle w-1.5 h-1.5 top-[60%] left-[40%]" style="animation-delay: 4s;"></div>
+        <div class="particle w-2.5 h-2.5 top-[35%] left-[80%]" style="animation-delay: 1s;"></div>
+      </div>
+
+      <!-- Atmospheric Vignette & Architectural Grid Overlay -->
+      <div class="absolute inset-0 hero-vignette z-10 pointer-events-none"></div>
+      <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_40%,#000_70%,transparent_100%)] z-10 pointer-events-none"></div>
+
+    </div>
+
+    <!-- Telemetry Flight HUD (Visible during aerial descent) -->
+    <div id="flight-hud" class="fixed top-24 left-6 sm:left-12 right-6 sm:right-12 z-30 flex items-start justify-between pointer-events-none transition-all duration-500">
+      
+      <!-- Left: Drone Telemetry Readout -->
+      <div class="glass-dark px-4 py-2.5 rounded-xl border border-brand-500/20 font-mono text-[10px] text-gray-300 space-y-1 shadow-2xl">
+        <div class="flex items-center gap-2 text-brand-400 font-bold tracking-wider">
+          <span class="w-2 h-2 rounded-full bg-brand-400 animate-ping"></span>
+          <span>MAKKAR REAL ESTATE • AERIAL FLIGHT</span>
+        </div>
+        <div class="text-gray-400">
+          ALTITUDE: <span id="hud-alt" class="text-white font-semibold">480 FT</span> | PITCH: <span id="hud-pitch" class="text-white font-semibold">-55°</span>
+        </div>
+        <div class="text-brand-300 tracking-widest text-[9px]">
+          PHASE: <span id="hud-phase" class="uppercase font-semibold">Scene 1: High Sky Orbit</span>
+        </div>
+      </div>
+
+      <!-- Right: Skip Flight Button & Controls -->
+      <div class="pointer-events-auto flex items-center gap-3">
+        <button id="skip-flight-btn" onclick="skipCinematicFlight()" class="glass-dark hover:bg-brand-500 hover:text-brand-950 text-gray-300 px-4 py-2 rounded-full border border-white/20 text-[11px] uppercase tracking-widest font-semibold transition-all duration-300 shadow-xl flex items-center gap-2">
+          <span>Skip to Sanctuary</span>
+          <span>→</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Flight Progress Bar (Bottom) -->
+    <div id="flight-progress-container" class="fixed bottom-6 left-12 right-12 z-30 pointer-events-none transition-opacity duration-500">
+      <div class="w-full h-1 bg-white/10 rounded-full overflow-hidden max-w-xl mx-auto shadow-2xl backdrop-blur-md">
+        <div id="flight-progress-bar" class="h-full bg-gradient-to-r from-brand-500 via-brand-300 to-brand-500 w-0 transition-all duration-100 ease-linear"></div>
+      </div>
+    </div>
+
+    <!-- Hero Content (Revealed seamlessly in Scene 5) -->
+    <div id="hero-content" class="relative z-20 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white mt-12 sm:mt-8 transition-all duration-700">
+      
+      <!-- Sub-badge & Replay Flight Pill -->
+      <div class="flex items-center justify-center gap-3 mb-8">
+        <div id="hero-badge" class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full glass-dark border border-brand-500/30 text-[11px] font-semibold tracking-widest text-brand-300 uppercase shadow-2xl">
+          <span class="w-1.5 h-1.5 rounded-full bg-brand-400 animate-pulse"></span>
+          Curated Portfolio of Rare Sanctuaries
+        </div>
+
+        <!-- Replay Flight Button (Available anytime in settled hero view) -->
+        <button onclick="replayCinematicFlight()" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-dark hover:bg-brand-500/20 border border-brand-500/30 text-[11px] font-semibold tracking-widest text-brand-400 hover:text-white uppercase transition-colors shadow-2xl group" title="Watch Drone Descent Again">
+          <span class="transform transition-transform duration-500 group-hover:-rotate-180">↺</span>
+          <span class="hidden sm:inline">Replay Sky Flight</span>
+        </button>
+      </div>
+
+      <!-- Main Cinematic Headline -->
+      <div class="overflow-hidden mb-6">
+        <h1 id="hero-title" class="font-serif text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-normal tracking-tight leading-[1.08] text-white">
+          Find a Place <br class="hidden sm:inline" />
+          <span class="italic font-normal text-gold-gradient">Beyond Ordinary.</span>
+        </h1>
+      </div>
+
+      <!-- Hero Subtitle -->
+      <p id="hero-subtitle" class="max-w-2xl mx-auto text-gray-300/90 text-sm sm:text-lg mb-12 leading-relaxed font-light tracking-wide">
+        Ultra-prime estates, luxury residential plots, and premium commercial sanctuaries represented with utmost trust by Makkar Real Estate. Direct: <a href="tel:09877600523" class="text-brand-400 font-semibold hover:underline">098776 00523</a>.
+      </p>
+
+      <!-- Floating Filter & Search Console -->
+      <div id="hero-search" class="glass-dark rounded-2xl p-4 sm:p-5 shadow-2xl max-w-4xl mx-auto border border-brand-500/20 text-left transition-all duration-300 hover:border-brand-500/40">
+        <form id="search-form" onsubmit="event.preventDefault(); filterCards();" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+          
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-widest text-brand-300 mb-1.5 flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              Location
+            </label>
+            <div class="relative">
+              <select id="location-filter" class="w-full bg-brand-950/80 text-gray-200 border border-white/10 rounded-xl px-3.5 py-3 text-xs font-medium focus:ring-1 focus:ring-brand-500 focus:border-brand-500 outline-none transition appearance-none cursor-pointer">
+                <option value="all">Global Locations</option>
+                <option value="beverly">Beverly Hills, CA</option>
+                <option value="miami">Miami Beach, FL</option>
+                <option value="aspen">Aspen, CO</option>
+                <option value="manhattan">Tribeca, New York</option>
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-400">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-widest text-brand-300 mb-1.5 flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+              Property Style
+            </label>
+            <div class="relative">
+              <select id="type-filter" class="w-full bg-brand-950/80 text-gray-200 border border-white/10 rounded-xl px-3.5 py-3 text-xs font-medium focus:ring-1 focus:ring-brand-500 focus:border-brand-500 outline-none transition appearance-none cursor-pointer">
+                <option value="all">All Architectural Types</option>
+                <option value="villa">Modernist Villa</option>
+                <option value="penthouse">Sky Penthouse</option>
+                <option value="waterfront">Waterfront Promontory</option>
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-400">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-widest text-brand-300 mb-1.5 flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Valuation Bracket
+            </label>
+            <div class="relative">
+              <select id="price-filter" class="w-full bg-brand-950/80 text-gray-200 border border-white/10 rounded-xl px-3.5 py-3 text-xs font-medium focus:ring-1 focus:ring-brand-500 focus:border-brand-500 outline-none transition appearance-none cursor-pointer">
+                <option value="all">Any Valuation</option>
+                <option value="under5m">Under $5M USD</option>
+                <option value="5m10m">$5M — $10M USD</option>
+                <option value="over10m">$10M+ USD Ultra-Prime</option>
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-400">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <button type="submit" class="w-full bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-400 hover:to-brand-500 text-brand-950 font-bold py-3 px-5 rounded-xl text-xs uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-brand-500/20 active:scale-[0.98]">
+              <svg class="w-4 h-4 text-brand-950" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              Search Portfolio
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- Quick stats row under search -->
+      <div class="mt-8 flex items-center justify-center gap-8 text-[11px] text-gray-400 uppercase tracking-widest font-mono">
+        <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> 6 Featured Sanctuaries</span>
+        <span class="hidden sm:inline-block text-gray-600">•</span>
+        <span class="hidden sm:flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-brand-400"></span> Off-Market Access</span>
+        <span class="hidden sm:inline-block text-gray-600">•</span>
+        <span class="hidden sm:flex items-center gap-2">Private Helicopter Viewings</span>
+      </div>
+
+    </div>
+
+    <!-- Looping Mouse Scroll Indicator -->
+    <a href="#stats" class="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 text-gray-400 hover:text-brand-300 transition-colors z-20 group">
+      <span class="text-[9px] uppercase tracking-[0.3em] font-semibold text-gray-400 group-hover:text-brand-400 transition">Explore</span>
+      <div class="w-5 h-8 rounded-full border border-gray-400/50 flex justify-center pt-1.5">
+        <div class="w-1 h-2 rounded-full bg-brand-400 scroll-wheel"></div>
+      </div>
+    </a>
+
+  </section>
+
+
+  <!-- ============================================================ -->
+  <!-- 3. ANIMATED STATISTICS / HERITAGE COUNTER -->
+  <!-- ============================================================ -->
+  <section id="stats" class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6">
+    <div class="glass-card-dark rounded-2xl p-8 sm:p-10 shadow-2xl border border-brand-500/20 grid grid-cols-2 lg:grid-cols-4 gap-8 text-center divide-y lg:divide-y-0 lg:divide-x divide-white/10">
+      
+      <div class="stat-card pt-3 lg:pt-0">
+        <div class="font-serif text-3xl sm:text-5xl font-normal text-white">
+          $<span class="stat-number" data-target="850">0</span>M+
+        </div>
+        <p class="text-[11px] uppercase tracking-[0.25em] text-brand-400 font-semibold mt-2">Transacted Volume</p>
+        <p class="text-[11px] text-gray-400 mt-1 font-light">Worldwide portfolio record</p>
+      </div>
+
+      <div class="stat-card pt-3 lg:pt-0">
+        <div class="font-serif text-3xl sm:text-5xl font-normal text-white">
+          <span class="stat-number" data-target="240">0</span>+
+        </div>
+        <p class="text-[11px] uppercase tracking-[0.25em] text-brand-400 font-semibold mt-2">Prime Residences</p>
+        <p class="text-[11px] text-gray-400 mt-1 font-light">Curated & architectural</p>
+      </div>
+
+      <div class="stat-card pt-6 lg:pt-0">
+        <div class="font-serif text-3xl sm:text-5xl font-normal text-white">
+          <span class="stat-number" data-target="99.4" data-decimals="1">0</span>%
+        </div>
+        <p class="text-[11px] uppercase tracking-[0.25em] text-brand-400 font-semibold mt-2">Client Trust Score</p>
+        <p class="text-[11px] text-gray-400 mt-1 font-light">Confidential discretion</p>
+      </div>
+
+      <div class="stat-card pt-6 lg:pt-0">
+        <div class="font-serif text-3xl sm:text-5xl font-normal text-white">
+          <span class="stat-number" data-target="18">0</span>
+        </div>
+        <p class="text-[11px] uppercase tracking-[0.25em] text-brand-400 font-semibold mt-2">Design Awards</p>
+        <p class="text-[11px] text-gray-400 mt-1 font-light">Architectural excellence</p>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================ -->
+  <!-- 4. EDITORIAL ARCHITECTURAL PHILOSOPHY SECTION -->
+  <!-- ============================================================ -->
+  <section id="philosophy" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28 relative">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+      
+      <!-- Architectural Visual Composition -->
+      <div class="lg:col-span-6 relative">
+        <div class="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10 group">
+          <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80" alt="Architectural Sanctuary" class="w-full h-[520px] object-cover transition-transform duration-700 group-hover:scale-105">
+          <div class="absolute inset-0 bg-gradient-to-t from-brand-950 via-transparent to-transparent opacity-80"></div>
+          
+          <div class="absolute bottom-6 left-6 right-6 p-6 rounded-xl glass-dark border border-white/10">
+            <span class="text-[10px] uppercase tracking-widest text-brand-400 font-semibold block mb-1">Architectural Philosophy</span>
+            <p class="font-serif text-lg text-white italic">“Where natural horizon meets deliberate structural harmony.”</p>
+          </div>
+        </div>
+
+        <!-- Floating Accent Card -->
+        <div class="hidden sm:block absolute -top-6 -right-6 glass-dark border border-brand-500/30 p-5 rounded-2xl shadow-2xl max-w-[210px]">
+          <div class="flex items-center gap-3 mb-2">
+            <div class="w-8 h-8 rounded-full bg-brand-500/20 flex items-center justify-center text-brand-400">
+              ✦
+            </div>
+            <span class="text-xs uppercase tracking-widest font-bold text-white">Curated Rarity</span>
+          </div>
+          <p class="text-[11px] text-gray-400 leading-relaxed">Only residences meeting the highest echelon of architectural integrity are accepted.</p>
+        </div>
+      </div>
+
+      <!-- Philosophy Text Content -->
+      <div class="lg:col-span-6 space-y-6">
+        <div class="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-brand-400 font-semibold">
+          <span class="w-6 h-[1px] bg-brand-400"></span>
+          Bespoke Curation
+        </div>
+        
+        <h2 class="font-serif text-3xl sm:text-5xl font-normal text-white leading-tight">
+          We curate spaces that elevate the Human Spirit.
+        </h2>
+        
+        <p class="text-gray-300 text-sm sm:text-base leading-relaxed font-light">
+          Makkar Real Estate operates beyond conventional property consulting. We represent prime architectural estates, premium agricultural holdings, luxury residential plots, and commercial properties with verified clear titles, unyielding integrity, and absolute confidentiality.
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-white/10">
+          <div class="space-y-2">
+            <h4 class="font-serif text-lg text-white font-medium">Generational Heritage</h4>
+            <p class="text-xs text-gray-400 leading-relaxed font-light">Assets engineered not merely for acquisition, but to be bequeathed as timeless family sanctuaries.</p>
+          </div>
+          <div class="space-y-2">
+            <h4 class="font-serif text-lg text-white font-medium">Absolute Discretion</h4>
+            <p class="text-xs text-gray-400 leading-relaxed font-light">Over 40% of our portfolio transacts through private off-market channels without public exposure.</p>
+          </div>
+        </div>
+
+        <div class="pt-2">
+          <a href="#properties" class="inline-flex items-center gap-3 text-xs uppercase tracking-widest font-semibold text-brand-400 hover:text-white transition-colors group">
+            Explore Curated Residences
+            <svg class="w-4 h-4 transform transition-transform duration-300 group-hover:translate-x-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================ -->
+  <!-- 5. FEATURED RESIDENCES SECTION -->
+  <!-- ============================================================ -->
+  <section id="properties" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative">
+    
+    <!-- Section Header & Filter Tabs -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6">
+      <div>
+        <span class="text-xs uppercase tracking-[0.25em] text-brand-400 font-semibold block mb-2">Prime Portfolio</span>
+        <h2 class="font-serif text-3xl sm:text-5xl font-normal text-white">Featured Architectural Sanctuaries</h2>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="flex flex-wrap gap-2.5 p-1 rounded-full glass-dark border border-white/10 self-start md:self-auto">
+        <button onclick="filterTag('all')" class="category-btn active px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-brand-500 text-brand-950 transition-all duration-300 shadow-md">All Homes</button>
+        <button onclick="filterTag('villa')" class="category-btn px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider text-gray-300 hover:text-white transition-all duration-300">Villas</button>
+        <button onclick="filterTag('penthouse')" class="category-btn px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider text-gray-300 hover:text-white transition-all duration-300">Penthouses</button>
+        <button onclick="filterTag('waterfront')" class="category-btn px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider text-gray-300 hover:text-white transition-all duration-300">Waterfront</button>
+      </div>
+    </div>
+
+    <!-- Properties Grid -->
+    <div id="property-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      
+      <!-- PROPERTY 1 -->
+      <div class="property-card property-card-lift glass-card-dark rounded-2xl overflow-hidden border border-brand-500/15 group cursor-pointer flex flex-col"
+           data-id="1"
+           data-title="The Glass Pavilion Villa"
+           data-location="Beverly Hills, CA"
+           data-price="$8,450,000"
+           data-price-val="8450000"
+           data-type="villa"
+           data-beds="5"
+           data-baths="6"
+           data-sqft="6,800"
+           data-tag="Featured"
+           data-desc="Architectural cantilevered sanctuary featuring an infinity-edge pool, seamless indoor-outdoor transition, 30-foot living glass walls, and panoramic Pacific sunset vistas."
+           data-img="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200&q=80"
+           data-gallery="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1400&q=80,https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=80,https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=1400&q=80"
+           onclick="openPropertyModal(this)">
+        
+        <div class="relative h-72 overflow-hidden bg-brand-950">
+          <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=800&q=80" alt="The Glass Pavilion Villa" class="w-full h-full object-cover transform transition-transform duration-700 ease-out group-hover:scale-110">
+          <div class="absolute inset-0 bg-gradient-to-t from-brand-950 via-transparent to-transparent opacity-80"></div>
+          
+          <div class="absolute top-4 left-4">
+            <span class="px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase bg-brand-500 text-brand-950 shadow-md">
+              Featured
+            </span>
+          </div>
+
+          <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <span class="w-9 h-9 rounded-full glass-dark flex items-center justify-center text-white hover:text-brand-400">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            </span>
+          </div>
+
+          <div class="absolute bottom-4 left-4 right-4 flex items-end justify-between">
+            <span class="font-serif text-2xl font-semibold text-white drop-shadow-md">$8,450,000</span>
+            <span class="text-[10px] uppercase tracking-wider text-brand-300 font-mono">For Sale</span>
+          </div>
+        </div>
+
+        <div class="p-6 flex-1 flex flex-col justify-between">
+          <div>
+            <div class="text-[11px] font-semibold text-brand-400 uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+              Beverly Hills, CA
+            </div>
+            <h3 class="font-serif text-xl font-normal text-white group-hover:text-brand-300 transition-colors mb-2">The Glass Pavilion Villa</h3>
+            <p class="text-xs text-gray-400 line-clamp-2 leading-relaxed font-light mb-6">
+              Cantilevered living with infinity edge pool, seamless indoor-outdoor architectural flow, panoramic sunset views.
+            </p>
+          </div>
+
+          <div>
+            <div class="pt-4 border-t border-white/10 flex items-center justify-between text-xs text-gray-300 font-mono">
+              <span>🛏️ 5 Beds</span>
+              <span>🚿 6 Baths</span>
+              <span>📐 6,800 sq ft</span>
+            </div>
+            <div class="mt-4 pt-3 flex items-center justify-between text-[11px] uppercase tracking-wider text-brand-400 font-semibold group-hover:text-white transition-colors">
+              <span>View Gallery & Floorplans</span>
+              <span class="transform transition-transform group-hover:translate-x-1">→</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- PROPERTY 2 -->
+      <div class="property-card property-card-lift glass-card-dark rounded-2xl overflow-hidden border border-brand-500/15 group cursor-pointer flex flex-col"
+           data-id="2"
+           data-title="Grand Horizon Sky Penthouse"
+           data-location="Tribeca, New York"
+           data-price="$12,800,000"
+           data-price-val="12800000"
+           data-type="penthouse"
+           data-beds="4"
+           data-baths="5"
+           data-sqft="5,200"
+           data-tag="New Listing"
+           data-desc="Crowning jewel atop an iconic Tribeca cast-iron conversion. Private 2,000 sq ft landscaped wraparound terrace, 360-degree Manhattan skyline panoramas, direct keyed elevator, and book-matched Calacatta marble fireplace."
+           data-img="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80"
+           data-gallery="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1400&q=80,https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1400&q=80,https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1400&q=80"
+           onclick="openPropertyModal(this)">
+        
+        <div class="relative h-72 overflow-hidden bg-brand-950">
+          <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80" alt="Grand Horizon Sky Penthouse" class="w-full h-full object-cover transform transition-transform duration-700 ease-out group-hover:scale-110">
+          <div class="absolute inset-0 bg-gradient-to-t from-brand-950 via-transparent to-transparent opacity-80"></div>
+          
+          <div class="absolute top-4 left-4">
+            <span class="px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase bg-emerald-500 text-brand-950 shadow-md">
+              New Listing
+            </span>
+          </div>
+
+          <div class="absolute bottom-4 left-4 right-4 flex items-end justify-between">
+            <span class="font-serif text-2xl font-semibold text-white drop-shadow-md">$12,800,000</span>
+            <span class="text-[10px] uppercase tracking-wider text-brand-300 font-mono">Exclusive</span>
+          </div>
+        </div>
+
+        <div class="p-6 flex-1 flex flex-col justify-between">
+          <div>
+            <div class="text-[11px] font-semibold text-brand-400 uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+              Tribeca, New York
+            </div>
+            <h3 class="font-serif text-xl font-normal text-white group-hover:text-brand-300 transition-colors mb-2">Grand Horizon Penthouse</h3>
+            <p class="text-xs text-gray-400 line-clamp-2 leading-relaxed font-light mb-6">
+              Private rooftop terrace, 360° skyline vistas, private keyed elevator, custom Italian marble.
+            </p>
+          </div>
+
+          <div>
+            <div class="pt-4 border-t border-white/10 flex items-center justify-between text-xs text-gray-300 font-mono">
+              <span>🛏️ 4 Beds</span>
+              <span>🚿 5 Baths</span>
+              <span>📐 5,200 sq ft</span>
+            </div>
+            <div class="mt-4 pt-3 flex items-center justify-between text-[11px] uppercase tracking-wider text-brand-400 font-semibold group-hover:text-white transition-colors">
+              <span>View Gallery & Floorplans</span>
+              <span class="transform transition-transform group-hover:translate-x-1">→</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- PROPERTY 3 -->
+      <div class="property-card property-card-lift glass-card-dark rounded-2xl overflow-hidden border border-brand-500/15 group cursor-pointer flex flex-col"
+           data-id="3"
+           data-title="Biscayne Waterfront Haven"
+           data-location="Miami Beach, FL"
+           data-price="$14,500,000"
+           data-price-val="14500000"
+           data-type="waterfront"
+           data-beds="6"
+           data-baths="7"
+           data-sqft="8,100"
+           data-tag="Waterfront"
+           data-desc="Ultra-exclusive Biscayne Bay sanctuary with 120 feet of deep-water dockage equipped for a 110-foot superyacht. Heated saltwater lap pool, rooftop wellness solarium, and bespoke smart automation."
+           data-img="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80"
+           data-gallery="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1400&q=80,https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1400&q=80,https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1400&q=80"
+           onclick="openPropertyModal(this)">
+        
+        <div class="relative h-72 overflow-hidden bg-brand-950">
+          <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80" alt="Biscayne Waterfront Haven" class="w-full h-full object-cover transform transition-transform duration-700 ease-out group-hover:scale-110">
+          <div class="absolute inset-0 bg-gradient-to-t from-brand-950 via-transparent to-transparent opacity-80"></div>
+          
+          <div class="absolute top-4 left-4">
+            <span class="px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase bg-sky-500 text-brand-950 shadow-md">
+              Waterfront
+            </span>
+          </div>
+
+          <div class="absolute bottom-4 left-4 right-4 flex items-end justify-between">
+            <span class="font-serif text-2xl font-semibold text-white drop-shadow-md">$14,500,000</span>
+            <span class="text-[10px] uppercase tracking-wider text-brand-300 font-mono">Private Dock</span>
+          </div>
+        </div>
+
+        <div class="p-6 flex-1 flex flex-col justify-between">
+          <div>
+            <div class="text-[11px] font-semibold text-brand-400 uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+              Miami Beach, FL
+            </div>
+            <h3 class="font-serif text-xl font-normal text-white group-hover:text-brand-300 transition-colors mb-2">Biscayne Waterfront Haven</h3>
+            <p class="text-xs text-gray-400 line-clamp-2 leading-relaxed font-light mb-6">
+              Private superyacht dock, tropical resort landscaping, smart automation, private beach access.
+            </p>
+          </div>
+
+          <div>
+            <div class="pt-4 border-t border-white/10 flex items-center justify-between text-xs text-gray-300 font-mono">
+              <span>🛏️ 6 Beds</span>
+              <span>🚿 7 Baths</span>
+              <span>📐 8,100 sq ft</span>
+            </div>
+            <div class="mt-4 pt-3 flex items-center justify-between text-[11px] uppercase tracking-wider text-brand-400 font-semibold group-hover:text-white transition-colors">
+              <span>View Gallery & Floorplans</span>
+              <span class="transform transition-transform group-hover:translate-x-1">→</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- PROPERTY 4 -->
+      <div class="property-card property-card-lift glass-card-dark rounded-2xl overflow-hidden border border-brand-500/15 group cursor-pointer flex flex-col"
+           data-id="4"
+           data-title="The Timberline Alpine Sanctuary"
+           data-location="Aspen, CO"
+           data-price="$4,200,000"
+           data-price-val="4200000"
+           data-type="villa"
+           data-beds="4"
+           data-baths="4"
+           data-sqft="4,600"
+           data-tag="Mountain Retreat"
+           data-desc="Direct ski-in / ski-out luxury chalet built with reclaimed timber, local riverstone, floor-to-ceiling glass framing snow-capped peaks, Nordic cedar sauna, and heated outdoor stone jacuzzi."
+           data-img="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80"
+           data-gallery="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1400&q=80,https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=80,https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1400&q=80"
+           onclick="openPropertyModal(this)">
+        
+        <div class="relative h-72 overflow-hidden bg-brand-950">
+          <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80" alt="The Timberline Alpine Sanctuary" class="w-full h-full object-cover transform transition-transform duration-700 ease-out group-hover:scale-110">
+          <div class="absolute inset-0 bg-gradient-to-t from-brand-950 via-transparent to-transparent opacity-80"></div>
+          
+          <div class="absolute top-4 left-4">
+            <span class="px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase bg-amber-500 text-brand-950 shadow-md">
+              Mountain Retreat
+            </span>
+          </div>
+
+          <div class="absolute bottom-4 left-4 right-4 flex items-end justify-between">
+            <span class="font-serif text-2xl font-semibold text-white drop-shadow-md">$4,200,000</span>
+            <span class="text-[10px] uppercase tracking-wider text-brand-300 font-mono">Ski-In/Out</span>
+          </div>
+        </div>
+
+        <div class="p-6 flex-1 flex flex-col justify-between">
+          <div>
+            <div class="text-[11px] font-semibold text-brand-400 uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+              Aspen, CO
+            </div>
+            <h3 class="font-serif text-xl font-normal text-white group-hover:text-brand-300 transition-colors mb-2">The Timberline Sanctuary</h3>
+            <p class="text-xs text-gray-400 line-clamp-2 leading-relaxed font-light mb-6">
+              Direct ski-in / ski-out, cedar sauna, stone fireplaces, and floor-to-ceiling mountain glass.
+            </p>
+          </div>
+
+          <div>
+            <div class="pt-4 border-t border-white/10 flex items-center justify-between text-xs text-gray-300 font-mono">
+              <span>🛏️ 4 Beds</span>
+              <span>🚿 4 Baths</span>
+              <span>📐 4,600 sq ft</span>
+            </div>
+            <div class="mt-4 pt-3 flex items-center justify-between text-[11px] uppercase tracking-wider text-brand-400 font-semibold group-hover:text-white transition-colors">
+              <span>View Gallery & Floorplans</span>
+              <span class="transform transition-transform group-hover:translate-x-1">→</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- PROPERTY 5 -->
+      <div class="property-card property-card-lift glass-card-dark rounded-2xl overflow-hidden border border-brand-500/15 group cursor-pointer flex flex-col"
+           data-id="5"
+           data-title="Solaris Tower Duplex Loft"
+           data-location="Miami, FL"
+           data-price="$6,900,000"
+           data-price-val="6900000"
+           data-type="penthouse"
+           data-beds="3"
+           data-baths="3.5"
+           data-sqft="3,900"
+           data-tag="Modern Loft"
+           data-desc="Architectural double-height loft with custom cantilevered steel staircase, private heated plunge pool on the sky deck, 24/7 concierge, private wine cellar, and subterranean multi-vehicle valet."
+           data-img="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200&q=80"
+           data-gallery="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1400&q=80,https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1400&q=80,https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1400&q=80"
+           onclick="openPropertyModal(this)">
+        
+        <div class="relative h-72 overflow-hidden bg-brand-950">
+          <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80" alt="Solaris Tower Duplex Loft" class="w-full h-full object-cover transform transition-transform duration-700 ease-out group-hover:scale-110">
+          <div class="absolute inset-0 bg-gradient-to-t from-brand-950 via-transparent to-transparent opacity-80"></div>
+          
+          <div class="absolute top-4 left-4">
+            <span class="px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase bg-purple-500 text-brand-950 shadow-md">
+              Modern Loft
+            </span>
+          </div>
+
+          <div class="absolute bottom-4 left-4 right-4 flex items-end justify-between">
+            <span class="font-serif text-2xl font-semibold text-white drop-shadow-md">$6,900,000</span>
+            <span class="text-[10px] uppercase tracking-wider text-brand-300 font-mono">Duplex</span>
+          </div>
+        </div>
+
+        <div class="p-6 flex-1 flex flex-col justify-between">
+          <div>
+            <div class="text-[11px] font-semibold text-brand-400 uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+              Miami, FL
+            </div>
+            <h3 class="font-serif text-xl font-normal text-white group-hover:text-brand-300 transition-colors mb-2">Solaris Tower Duplex</h3>
+            <p class="text-xs text-gray-400 line-clamp-2 leading-relaxed font-light mb-6">
+              Double-height ceilings, private plunge pool on terrace, valet parking, and 24/7 concierge.
+            </p>
+          </div>
+
+          <div>
+            <div class="pt-4 border-t border-white/10 flex items-center justify-between text-xs text-gray-300 font-mono">
+              <span>🛏️ 3 Beds</span>
+              <span>🚿 3.5 Baths</span>
+              <span>📐 3,900 sq ft</span>
+            </div>
+            <div class="mt-4 pt-3 flex items-center justify-between text-[11px] uppercase tracking-wider text-brand-400 font-semibold group-hover:text-white transition-colors">
+              <span>View Gallery & Floorplans</span>
+              <span class="transform transition-transform group-hover:translate-x-1">→</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- PROPERTY 6 -->
+      <div class="property-card property-card-lift glass-card-dark rounded-2xl overflow-hidden border border-brand-500/15 group cursor-pointer flex flex-col"
+           data-id="6"
+           data-title="Mulholland Private Ridge Estate"
+           data-location="Beverly Hills, CA"
+           data-price="$9,750,000"
+           data-price-val="9750000"
+           data-type="waterfront"
+           data-beds="7"
+           data-baths="8"
+           data-sqft="9,400"
+           data-tag="Exclusive"
+           data-desc="Gated 2.2-acre promontory with championship tennis court, 2,000-bottle subterranean temperature-controlled wine vault, detached guest residence, and infinity edge viewing deck over the canyon."
+           data-img="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80"
+           data-gallery="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1400&q=80,https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1400&q=80,https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=80"
+           onclick="openPropertyModal(this)">
+        
+        <div class="relative h-72 overflow-hidden bg-brand-950">
+          <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80" alt="Mulholland Private Ridge Estate" class="w-full h-full object-cover transform transition-transform duration-700 ease-out group-hover:scale-110">
+          <div class="absolute inset-0 bg-gradient-to-t from-brand-950 via-transparent to-transparent opacity-80"></div>
+          
+          <div class="absolute top-4 left-4">
+            <span class="px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase bg-brand-400 text-brand-950 shadow-md">
+              Exclusive
+            </span>
+          </div>
+
+          <div class="absolute bottom-4 left-4 right-4 flex items-end justify-between">
+            <span class="font-serif text-2xl font-semibold text-white drop-shadow-md">$9,750,000</span>
+            <span class="text-[10px] uppercase tracking-wider text-brand-300 font-mono">Gated 2-Acre</span>
+          </div>
+        </div>
+
+        <div class="p-6 flex-1 flex flex-col justify-between">
+          <div>
+            <div class="text-[11px] font-semibold text-brand-400 uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+              Beverly Hills, CA
+            </div>
+            <h3 class="font-serif text-xl font-normal text-white group-hover:text-brand-300 transition-colors mb-2">Mulholland Private Ridge</h3>
+            <p class="text-xs text-gray-400 line-clamp-2 leading-relaxed font-light mb-6">
+              Gated 2-acre private promontory, tennis court, wine cellar, and guest villa residence.
+            </p>
+          </div>
+
+          <div>
+            <div class="pt-4 border-t border-white/10 flex items-center justify-between text-xs text-gray-300 font-mono">
+              <span>🛏️ 7 Beds</span>
+              <span>🚿 8 Baths</span>
+              <span>📐 9,400 sq ft</span>
+            </div>
+            <div class="mt-4 pt-3 flex items-center justify-between text-[11px] uppercase tracking-wider text-brand-400 font-semibold group-hover:text-white transition-colors">
+              <span>View Gallery & Floorplans</span>
+              <span class="transform transition-transform group-hover:translate-x-1">→</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Empty Results Fallback -->
+    <div id="no-results-msg" class="hidden text-center py-16">
+      <div class="w-16 h-16 mx-auto rounded-full bg-brand-950 border border-brand-500/20 flex items-center justify-center text-brand-400 text-2xl mb-4">
+        🔍
+      </div>
+      <h3 class="font-serif text-2xl text-white mb-2">No matching residences in this view</h3>
+      <p class="text-xs text-gray-400 max-w-md mx-auto mb-6 font-light">Try adjusting your filters, or request private off-market advisory for tailored confidential matches.</p>
+      <button onclick="resetFilters()" class="px-6 py-2.5 rounded-full bg-brand-500 text-brand-950 font-bold text-xs uppercase tracking-wider">Reset All Filters</button>
+    </div>
+
+  </section>
+
+
+  <!-- ============================================================ -->
+  <!-- 6. PRIVATE ADVISORY & SERVICES SECTION -->
+  <!-- ============================================================ -->
+  <section id="services" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 border-t border-white/10">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <span class="text-xs uppercase tracking-[0.25em] text-brand-400 font-semibold block mb-2">Unrivaled Service</span>
+      <h2 class="font-serif text-3xl sm:text-5xl font-normal text-white mb-4">The Makkar Advisory Experience</h2>
+      <p class="text-gray-400 text-sm font-light leading-relaxed">
+        We serve high-net-worth families, family offices, and architectural collectors with institutional discipline and white-glove intimacy.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      
+      <div class="glass-card-dark p-8 rounded-2xl border border-brand-500/15 hover:border-brand-500/40 transition duration-300">
+        <div class="w-12 h-12 rounded-xl bg-brand-500/10 border border-brand-500/30 flex items-center justify-center text-brand-400 text-xl font-cinzel mb-6">
+          01
+        </div>
+        <h3 class="font-serif text-xl text-white mb-3">Off-Market Vault</h3>
+        <p class="text-xs text-gray-400 leading-relaxed font-light">
+          Access unlisted prime estates protected under mutual NDAs. We connect principals directly without exposing asset valuations to the public eye.
+        </p>
+      </div>
+
+      <div class="glass-card-dark p-8 rounded-2xl border border-brand-500/15 hover:border-brand-500/40 transition duration-300">
+        <div class="w-12 h-12 rounded-xl bg-brand-500/10 border border-brand-500/30 flex items-center justify-center text-brand-400 text-xl font-cinzel mb-6">
+          02
+        </div>
+        <h3 class="font-serif text-xl text-white mb-3">Architectural Curation</h3>
+        <p class="text-xs text-gray-400 leading-relaxed font-light">
+          In-house architectural historians, structural engineers, and appraisers audit every estate's provenance, zoning rights, and replacement cost.
+        </p>
+      </div>
+
+      <div class="glass-card-dark p-8 rounded-2xl border border-brand-500/15 hover:border-brand-500/40 transition duration-300">
+        <div class="w-12 h-12 rounded-xl bg-brand-500/10 border border-brand-500/30 flex items-center justify-center text-brand-400 text-xl font-cinzel mb-6">
+          03
+        </div>
+        <h3 class="font-serif text-xl text-white mb-3">Private Jet & Chauffeur</h3>
+        <p class="text-xs text-gray-400 leading-relaxed font-light">
+          Coordinated multi-city inspection tours via private aviation and luxury ground transport, ensuring privacy and effortless evaluation.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================ -->
+  <!-- 7. CONFIDENTIAL CONSULTATION / BOOKING SECTION -->
+  <!-- ============================================================ -->
+  <section id="contact" class="relative py-24 overflow-hidden border-t border-white/10 bg-brand-950">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+        
+        <!-- Left Column: Copy & Trust Highlights -->
+        <div class="lg:col-span-5 space-y-6">
+          <span class="text-xs uppercase tracking-[0.25em] text-brand-400 font-semibold block">Confidential Engagement</span>
+          <h2 class="font-serif text-3xl sm:text-5xl font-normal text-white leading-tight">
+            Schedule a Private Viewing Experience
+          </h2>
+          <p class="text-gray-300 text-sm sm:text-base leading-relaxed font-light">
+            Whether inquiring about an acquisition or exploring confidential representation for an iconic home, our senior managing partners respond within 2 hours.
+          </p>
+          
+          <div class="space-y-4 pt-4 border-t border-white/10 text-xs text-gray-300">
+            <div class="flex items-center gap-3">
+              <span class="w-6 h-6 rounded-full bg-brand-500/20 text-brand-400 flex items-center justify-center font-bold">✓</span>
+              <span>100% Strict Client Non-Disclosure Agreements</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="w-6 h-6 rounded-full bg-brand-500/20 text-brand-400 flex items-center justify-center font-bold">✓</span>
+              <span>Direct communication with Makkar Real Estate Principals</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="w-6 h-6 rounded-full bg-brand-500/20 text-brand-400 flex items-center justify-center font-bold">✓</span>
+              <span>Verified clear title documents and instant physical site tours</span>
+            </div>
+          </div>
+
+          <div class="mt-8 pt-6 border-t border-white/10 flex flex-wrap gap-4 items-center">
+            <a href="tel:09877600523" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-brand-500 text-brand-950 font-bold text-xs uppercase tracking-wider transition hover:bg-brand-400 shadow-xl">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+              Call: 098776 00523
+            </a>
+            <a href="https://wa.me/919877600523" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-emerald-600/30 border border-emerald-500/50 text-emerald-300 font-bold text-xs uppercase tracking-wider transition hover:bg-emerald-600/50 shadow-xl">
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.159.57 4.184 1.564 5.938l-1.564 5.719 5.873-1.54c1.707.957 3.676 1.503 5.772 1.503 6.627 0 12-5.373 12-12 0-6.627-5.373-12-12-12z"/></svg>
+              WhatsApp Us
+            </a>
+          </div>
+        </div>
+
+        <!-- Right Column: Consultation Form -->
+        <div class="lg:col-span-7">
+          <div class="glass-card-dark p-8 sm:p-10 rounded-3xl border border-brand-500/30 shadow-2xl relative">
+            <h3 class="font-serif text-2xl text-white font-normal mb-1">Request Private Consultation</h3>
+            <p class="text-xs text-gray-400 font-light mb-6">Complete your specifications for immediate personalized advisory.</p>
+            
+            <form id="contact-form" onsubmit="event.preventDefault(); showNotice();" class="space-y-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-[10px] font-bold uppercase tracking-widest text-brand-300 mb-1.5">Principal Name</label>
+                  <input type="text" required placeholder="Lord / Lady / Mr. John Doe" class="w-full bg-brand-950/80 border border-white/10 text-white rounded-xl px-4 py-3 text-xs focus:ring-1 focus:ring-brand-500 focus:border-brand-500 outline-none">
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold uppercase tracking-widest text-brand-300 mb-1.5">Direct Telephone</label>
+                  <input type="tel" required placeholder="+1 (555) 000-0000" class="w-full bg-brand-950/80 border border-white/10 text-white rounded-xl px-4 py-3 text-xs focus:ring-1 focus:ring-brand-500 focus:border-brand-500 outline-none">
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-[10px] font-bold uppercase tracking-widest text-brand-300 mb-1.5">Confidential Email</label>
+                <input type="email" required placeholder="principal@familyoffice.com" class="w-full bg-brand-950/80 border border-white/10 text-white rounded-xl px-4 py-3 text-xs focus:ring-1 focus:ring-brand-500 focus:border-brand-500 outline-none">
+              </div>
+
+              <div>
+                <label class="block text-[10px] font-bold uppercase tracking-widest text-brand-300 mb-1.5">Sanctuary of Interest</label>
+                <select id="contact-property-select" class="w-full bg-brand-950/80 border border-white/10 text-white rounded-xl px-4 py-3 text-xs focus:ring-1 focus:ring-brand-500 focus:border-brand-500 outline-none cursor-pointer">
+                  <option value="The Glass Pavilion Villa">The Glass Pavilion Villa — Beverly Hills ($8.45M)</option>
+                  <option value="Grand Horizon Penthouse">Grand Horizon Sky Penthouse — Tribeca ($12.8M)</option>
+                  <option value="Biscayne Waterfront Haven">Biscayne Waterfront Haven — Miami Beach ($14.5M)</option>
+                  <option value="The Timberline Sanctuary">The Timberline Alpine Sanctuary — Aspen ($4.2M)</option>
+                  <option value="Solaris Tower Duplex">Solaris Tower Duplex Loft — Miami ($6.9M)</option>
+                  <option value="Mulholland Private Ridge">Mulholland Private Ridge Estate — Beverly Hills ($9.75M)</option>
+                  <option value="Off-Market Bespoke Request">Bespoke Off-Market Sanctuary Search</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-[10px] font-bold uppercase tracking-widest text-brand-300 mb-1.5">Preferred Timing & Requirements</label>
+                <textarea rows="3" placeholder="Please specify your desired inspection window, privacy requirements, or representative details..." class="w-full bg-brand-950/80 border border-white/10 text-white rounded-xl px-4 py-3 text-xs focus:ring-1 focus:ring-brand-500 focus:border-brand-500 outline-none"></textarea>
+              </div>
+
+              <button type="submit" class="w-full bg-gradient-to-r from-brand-500 via-brand-400 to-brand-600 hover:opacity-90 text-brand-950 font-bold py-3.5 px-6 rounded-xl text-xs uppercase tracking-widest transition-all duration-300 shadow-xl active:scale-[0.99]">
+                Submit Confidential Request
+              </button>
+            </form>
+
+            <div id="notice-box" class="hidden mt-4 p-4 bg-emerald-950/60 border border-emerald-500/40 text-emerald-300 rounded-xl text-xs font-mono text-center">
+              ✓ Confidential inquiry transmitted. A Senior Managing Partner will contact you within 2 hours.
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================ -->
+  <!-- 8. FOOTER -->
+  <!-- ============================================================ -->
+  <footer class="bg-brand-950 border-t border-white/10 py-16 text-xs text-gray-400">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex flex-col md:flex-row items-center justify-between gap-8 pb-12 border-b border-white/10">
+        <div class="flex items-center gap-3.5">
+          <div class="w-9 h-9 rounded-lg bg-brand-500 flex items-center justify-center text-brand-950 font-cinzel font-bold text-lg">
+            M
+          </div>
+          <div>
+            <span class="font-cinzel text-lg font-bold text-white tracking-[0.2em] block">MAKKAR REAL ESTATE</span>
+            <span class="text-[9px] uppercase tracking-[0.3em] text-brand-400 block -mt-1">Direct: 098776 00523</span>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-8 font-medium text-xs text-gray-400">
+          <a href="#properties" class="hover:text-white transition">Residences</a>
+          <a href="#philosophy" class="hover:text-white transition">Architectural Vision</a>
+          <a href="#services" class="hover:text-white transition">Private Advisory</a>
+          <a href="#contact" class="hover:text-white transition">Concierge</a>
+          <a href="https://wa.me/919877600523" target="_blank" rel="noopener noreferrer" class="text-emerald-400 hover:text-emerald-300 transition">WhatsApp: 09877600523</a>
+        </div>
+      </div>
+
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-gray-400 font-light">
+        <p>© 2026 Makkar Real Estate. All rights reserved. Helpline: <a href="tel:09877600523" class="text-brand-400 hover:underline">098776 00523</a></p>
+        <div class="flex gap-6">
+          <a href="tel:09877600523" class="hover:text-brand-400 transition">Call Direct</a>
+          <a href="https://wa.me/919877600523" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-400 transition">Chat on WhatsApp</a>
+          <a href="#" class="hover:text-brand-400 transition">Confidentiality Protocol</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+
+  <!-- ============================================================ -->
+  <!-- 9. PROPERTY DETAIL & GALLERY LIGHTBOX MODAL -->
+  <!-- ============================================================ -->
+  <div id="property-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 opacity-0 pointer-events-none transition-all duration-400">
+    
+    <!-- Modal Backdrop -->
+    <div class="absolute inset-0 bg-black/90 backdrop-blur-xl" onclick="closePropertyModal()"></div>
+
+    <!-- Modal Dialog Window -->
+    <div class="relative w-full max-w-5xl max-h-[92vh] overflow-y-auto glass-card-dark rounded-3xl border border-brand-500/30 shadow-2xl p-6 sm:p-8 z-10 modal-content transform scale-95 transition-transform duration-300">
+      
+      <!-- Close Button -->
+      <button onclick="closePropertyModal()" class="absolute top-5 right-5 w-10 h-10 rounded-full glass-dark border border-white/20 text-gray-300 hover:text-white flex items-center justify-center transition-all duration-200 z-20 hover:scale-105" aria-label="Close modal">
+        ✕
+      </button>
+
+      <!-- Main Gallery Viewer -->
+      <div class="space-y-4">
+        
+        <div class="relative h-[320px] sm:h-[440px] rounded-2xl overflow-hidden bg-brand-950 border border-white/10 group">
+          <img id="modal-main-img" src="" alt="Property Gallery" class="w-full h-full object-cover transition-all duration-500">
+          
+          <div class="absolute inset-0 bg-gradient-to-t from-brand-950/80 via-transparent to-transparent"></div>
+
+          <!-- Prev/Next Controls -->
+          <button onclick="changeModalImage(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full glass-dark border border-white/20 text-white flex items-center justify-center hover:bg-brand-500 hover:text-brand-950 transition-all duration-200" aria-label="Previous photo">
+            ‹
+          </button>
+          <button onclick="changeModalImage(1)" class="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full glass-dark border border-white/20 text-white flex items-center justify-center hover:bg-brand-500 hover:text-brand-950 transition-all duration-200" aria-label="Next photo">
+            ›
+          </button>
+
+          <!-- Top Badge & Counter -->
+          <div class="absolute top-4 left-4 flex gap-2">
+            <span id="modal-tag" class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-brand-500 text-brand-950 shadow-md">
+              Featured
+            </span>
+          </div>
+
+          <div class="absolute bottom-4 right-4 text-xs font-mono text-gray-300 glass-dark px-3 py-1 rounded-full border border-white/10">
+            <span id="modal-img-index">1</span> / <span id="modal-img-total">3</span> Views
+          </div>
+        </div>
+
+        <!-- Thumbnails Strip -->
+        <div id="modal-thumbnails" class="flex gap-3 overflow-x-auto pb-2"></div>
+
+        <!-- Property Information Content -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-4">
+          
+          <div class="lg:col-span-8 space-y-4">
+            <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-brand-400">
+              <span id="modal-location">Location</span>
+            </div>
+            
+            <h2 id="modal-title" class="font-serif text-2xl sm:text-4xl text-white font-normal">
+              Property Title
+            </h2>
+
+            <p id="modal-desc" class="text-xs sm:text-sm text-gray-300 leading-relaxed font-light">
+              Detailed architectural description...
+            </p>
+
+            <!-- Key Architectural Highlights -->
+            <div class="grid grid-cols-3 gap-3 pt-4 border-t border-white/10 text-center font-mono">
+              <div class="p-3 rounded-xl bg-white/5 border border-white/5">
+                <span class="block text-[10px] text-gray-400 uppercase tracking-widest">Bedrooms</span>
+                <span id="modal-beds" class="text-base text-white font-semibold">5 Beds</span>
+              </div>
+              <div class="p-3 rounded-xl bg-white/5 border border-white/5">
+                <span class="block text-[10px] text-gray-400 uppercase tracking-widest">Bathrooms</span>
+                <span id="modal-baths" class="text-base text-white font-semibold">6 Baths</span>
+              </div>
+              <div class="p-3 rounded-xl bg-white/5 border border-white/5">
+                <span class="block text-[10px] text-gray-400 uppercase tracking-widest">Interior Area</span>
+                <span id="modal-sqft" class="text-base text-white font-semibold">6,800 sq ft</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Price & Action CTA -->
+          <div class="lg:col-span-4 flex flex-col justify-between p-6 rounded-2xl glass-dark border border-brand-500/20">
+            <div>
+              <span class="text-[10px] uppercase tracking-widest text-brand-300 block mb-1">Confidential Valuation</span>
+              <div id="modal-price" class="font-serif text-3xl font-bold text-white mb-2">$8,450,000</div>
+              <div class="text-[11px] text-emerald-400 font-mono mb-6">● Verified Clear Title & Off-Market Available</div>
+            </div>
+
+            <div class="space-y-3">
+              <button onclick="bookViewingFromModal()" class="w-full bg-brand-500 hover:bg-brand-400 text-brand-950 font-bold py-3 px-4 rounded-xl text-xs uppercase tracking-widest transition shadow-lg flex items-center justify-center gap-2">
+                <span>Book Confidential Viewing</span>
+                <span>→</span>
+              </button>
+              <a href="tel:09877600523" class="w-full text-center block text-xs uppercase tracking-wider text-gray-200 hover:text-brand-400 py-2.5 rounded-xl bg-white/5 border border-white/10 transition font-mono font-bold">
+                📞 Call: 098776 00523
+              </a>
+              <a href="https://wa.me/919877600523" target="_blank" rel="noopener noreferrer" class="w-full text-center block text-xs uppercase tracking-wider text-emerald-400 hover:text-emerald-300 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 transition font-semibold">
+                💬 WhatsApp: 098776 00523
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- Floating Direct Contact Widget (Makkar Real Estate) -->
+  <div class="fixed bottom-4 left-4 z-40 flex items-center gap-2">
+    <a href="tel:09877600523" class="bg-brand-500 hover:bg-brand-400 text-brand-950 font-bold px-4 py-2.5 rounded-full shadow-2xl flex items-center gap-2 text-xs uppercase tracking-wider transition-all duration-300 hover:scale-105 active:scale-95 border border-brand-400">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+      <span>098776 00523</span>
+    </a>
+    <a href="https://wa.me/919877600523" target="_blank" rel="noopener noreferrer" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2.5 rounded-full shadow-2xl flex items-center gap-2 text-xs uppercase tracking-wider transition-all duration-300 hover:scale-105 active:scale-95 border border-emerald-400" title="Chat with Makkar Real Estate on WhatsApp">
+      <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.159.57 4.184 1.564 5.938l-1.564 5.719 5.873-1.54c1.707.957 3.676 1.503 5.772 1.503 6.627 0 12-5.373 12-12 0-6.627-5.373-12-12-12z"/></svg>
+      <span>WhatsApp</span>
+    </a>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 10. LOCALHOST STATUS PILL -->
+  <!-- ============================================================ -->
+  <div class="fixed bottom-4 right-4 z-40 bg-brand-950/90 text-white text-[11px] px-3.5 py-2 rounded-full shadow-2xl backdrop-blur-md border border-brand-500/30 flex items-center gap-2.5">
+    <span class="relative flex h-2 w-2">
+      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+      <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+    </span>
+    <span class="font-mono text-emerald-400 font-semibold">Localhost 3000 Active</span>
+  </div>
+
+
+  <!-- ============================================================ -->
+  <!-- 11. CINEMATIC CAMERA FLIGHT ENGINE & MOTION CONTROLLERS -->
+  <!-- ============================================================ -->
+  <script>
+    // --- GLOBAL FLIGHT CONFIGURATION ---
+    // Users can adjust speed, duration, or keyframe triggers here
+    window.FLIGHT_CONFIG = {
+      videoSrc: 'drone-entrance.mp4',
+      totalDuration: 10.5, // Target animation seconds
+      scenes: {
+        skyOrbit:    { from: 0.0, to: 0.32, altStart: 480, altEnd: 290, pitchStart: -55, pitchEnd: -35, label: "Scene 1: High Sky Aerial Orbit" },
+        descent:     { from: 0.32, to: 0.65, altStart: 290, altEnd: 55,  pitchStart: -35, pitchEnd: -15, label: "Scene 2: Descending Sky Flight" },
+        approach:    { from: 0.65, to: 0.82, altStart: 55,  altEnd: 12,  pitchStart: -15, pitchEnd: 0,   label: "Scene 3: Entrance Approach" },
+        enterDoor:   { from: 0.82, to: 0.94, altStart: 12,  altEnd: 5,   pitchStart: 0,   pitchEnd: 0,   label: "Scene 4: Entering Villa Doorway" },
+        settleHero:  { from: 0.94, to: 1.0,  altStart: 5,   altEnd: 5,   pitchStart: 0,   pitchEnd: 0,   label: "Scene 5: Settling Inside Living Room" }
+      },
+      prefersReducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    };
+
+    let isFlightComplete = false;
+    let flightAnimationId = null;
+
+    // Initialize Flight Controller on Load
+    document.addEventListener("DOMContentLoaded", () => {
+      
+      const prefersReduced = window.FLIGHT_CONFIG.prefersReducedMotion;
+      
+      if (prefersReduced) {
+        // Skip animation for reduced-motion accessibility
+        skipCinematicFlight(true);
+        return;
+      }
+
+      startCinematicFlight();
+
+      // Setup ScrollTrigger for body sections
+      if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+        gsap.registerPlugin(ScrollTrigger);
+
+        ScrollTrigger.create({
+          trigger: "#stats",
+          start: "top 85%",
+          once: true,
+          onEnter: () => animateCounters()
+        });
+
+        gsap.from(".property-card", {
+          scrollTrigger: {
+            trigger: "#property-grid",
+            start: "top 80%",
+            once: true
+          },
+          y: 50,
+          opacity: 0,
+          duration: 0.8,
+          stagger: 0.12,
+          ease: "power3.out"
+        });
+      }
+
+      // Header blur on scroll
+      const header = document.getElementById("main-header");
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 50) {
+          header.classList.add("glass-dark", "py-4", "shadow-xl");
+          header.classList.remove("py-6");
+        } else {
+          header.classList.remove("glass-dark", "py-4", "shadow-xl");
+          header.classList.add("py-6");
+        }
+      }, { passive: true });
+
+      // Mobile Menu
+      const mobileBtn = document.getElementById("mobile-menu-btn");
+      const mobileMenu = document.getElementById("mobile-menu");
+      const menuIconOpen = document.getElementById("menu-icon-open");
+      const menuIconClose = document.getElementById("menu-icon-close");
+
+      mobileBtn.addEventListener("click", () => {
+        const isOpen = !mobileMenu.classList.contains("opacity-0");
+        if (isOpen) {
+          mobileMenu.classList.add("opacity-0", "pointer-events-none");
+          menuIconOpen.classList.remove("hidden");
+          menuIconClose.classList.add("hidden");
+          document.body.style.overflow = "";
+        } else {
+          mobileMenu.classList.remove("opacity-0", "pointer-events-none");
+          menuIconOpen.classList.add("hidden");
+          menuIconClose.classList.remove("hidden");
+          document.body.style.overflow = "hidden";
+        }
+      });
+
+      document.querySelectorAll(".mobile-nav-link").forEach(link => {
+        link.addEventListener("click", () => {
+          mobileMenu.classList.add("opacity-0", "pointer-events-none");
+          menuIconOpen.classList.remove("hidden");
+          menuIconClose.classList.add("hidden");
+          document.body.style.overflow = "";
+        });
+      });
+
+    });
+
+    // --- CINEMATIC CAMERA FLIGHT ORCHESTRATOR ---
+    function startCinematicFlight() {
+      isFlightComplete = false;
+      const video = document.getElementById("drone-video");
+      const flightHud = document.getElementById("flight-hud");
+      const progressContainer = document.getElementById("flight-progress-container");
+      const heroContent = document.getElementById("hero-content");
+      const doorwayPortal = document.getElementById("doorway-portal");
+      const doorwayFrame = document.getElementById("doorway-frame");
+      const doorLeft = document.getElementById("door-left");
+      const doorRight = document.getElementById("door-right");
+      const interiorRoom = document.getElementById("interior-living-room");
+
+      // Reset layer states
+      heroContent.style.opacity = "0";
+      heroContent.style.transform = "translateY(30px)";
+      flightHud.style.opacity = "1";
+      flightHud.style.pointerEvents = "auto";
+      progressContainer.style.opacity = "1";
+
+      doorwayPortal.style.opacity = "0";
+      doorwayFrame.style.transform = "scale(0.85)";
+      doorLeft.style.transform = "rotateY(0deg)";
+      doorRight.style.transform = "rotateY(0deg)";
+      interiorRoom.style.opacity = "0";
+      interiorRoom.style.transform = "scale(1.15)";
+
+      // Attempt to play video
+      video.currentTime = 0;
+      const playPromise = video.play();
+
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          runFlightAnimationLoop(video.duration || window.FLIGHT_CONFIG.totalDuration);
+        }).catch(err => {
+          console.warn("Autoplay restricted or video load failed, using procedural timeline:", err);
+          runProceduralFlightTimeline();
+        });
+      } else {
+        runProceduralFlightTimeline();
+      }
+    }
+
+    // Synchronized loop matching video frame playback
+    function runFlightAnimationLoop(totalTime) {
+      const video = document.getElementById("drone-video");
+      const duration = totalTime > 2 ? totalTime : window.FLIGHT_CONFIG.totalDuration;
+
+      function updateFrame() {
+        if (isFlightComplete) return;
+
+        const currentTime = video.currentTime;
+        const progress = Math.min(currentTime / duration, 1.0);
+
+        renderFlightPhase(progress);
+
+        if (progress < 0.98 && !video.ended) {
+          flightAnimationId = requestAnimationFrame(updateFrame);
+        } else {
+          settleIntoHero();
+        }
+      }
+
+      flightAnimationId = requestAnimationFrame(updateFrame);
+    }
+
+    // Fallback procedural timeline in case video is unsupported
+    function runProceduralFlightTimeline() {
+      const duration = window.FLIGHT_CONFIG.totalDuration * 1000;
+      const startTime = performance.now();
+
+      function step(now) {
+        if (isFlightComplete) return;
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1.0);
+
+        renderFlightPhase(progress);
+
+        if (progress < 1.0) {
+          flightAnimationId = requestAnimationFrame(step);
+        } else {
+          settleIntoHero();
+        }
+      }
+
+      flightAnimationId = requestAnimationFrame(step);
+    }
+
+    // Render telemetry, doorway opening, and interior depth per keyframe progress
+    function renderFlightPhase(progress) {
+      const hudAlt = document.getElementById("hud-alt");
+      const hudPitch = document.getElementById("hud-pitch");
+      const hudPhase = document.getElementById("hud-phase");
+      const progressBar = document.getElementById("flight-progress-bar");
+      const doorwayPortal = document.getElementById("doorway-portal");
+      const doorwayFrame = document.getElementById("doorway-frame");
+      const doorLeft = document.getElementById("door-left");
+      const doorRight = document.getElementById("door-right");
+      const interiorRoom = document.getElementById("interior-living-room");
+      const aerialLayer = document.getElementById("aerial-flight-layer");
+
+      // Update progress bar
+      if (progressBar) progressBar.style.width = (progress * 100) + "%";
+
+      const cfg = window.FLIGHT_CONFIG.scenes;
+
+      // SCENE 1: High Sky Orbit (0.0 to 0.32)
+      if (progress < cfg.skyOrbit.to) {
+        const subP = progress / cfg.skyOrbit.to;
+        const alt = Math.round(cfg.skyOrbit.altStart - subP * (cfg.skyOrbit.altStart - cfg.skyOrbit.altEnd));
+        const pitch = Math.round(cfg.skyOrbit.pitchStart - subP * (cfg.skyOrbit.pitchStart - cfg.skyOrbit.pitchEnd));
+        hudAlt.innerText = alt + " FT";
+        hudPitch.innerText = pitch + "°";
+        hudPhase.innerText = cfg.skyOrbit.label;
+      }
+      // SCENE 2: Descending Sky Flight (0.32 to 0.65)
+      else if (progress < cfg.descent.to) {
+        const subP = (progress - cfg.descent.from) / (cfg.descent.to - cfg.descent.from);
+        const alt = Math.round(cfg.descent.altStart - subP * (cfg.descent.altStart - cfg.descent.altEnd));
+        const pitch = Math.round(cfg.descent.pitchStart - subP * (cfg.descent.pitchStart - cfg.descent.pitchEnd));
+        hudAlt.innerText = alt + " FT";
+        hudPitch.innerText = pitch + "°";
+        hudPhase.innerText = cfg.descent.label;
+      }
+      // SCENE 3: Entrance Approach (0.65 to 0.82)
+      else if (progress < cfg.approach.to) {
+        const subP = (progress - cfg.approach.from) / (cfg.approach.to - cfg.approach.from);
+        const alt = Math.round(cfg.approach.altStart - subP * (cfg.approach.altStart - cfg.approach.altEnd));
+        const pitch = Math.round(cfg.approach.pitchStart - subP * (cfg.approach.pitchStart - cfg.approach.pitchEnd));
+        hudAlt.innerText = alt + " FT";
+        hudPitch.innerText = pitch + "°";
+        hudPhase.innerText = cfg.approach.label;
+      }
+      // SCENE 4: Doorway Penetration & Interior Reveal (0.82 to 0.94)
+      else if (progress < cfg.enterDoor.to) {
+        const subP = (progress - cfg.enterDoor.from) / (cfg.enterDoor.to - cfg.enterDoor.from);
+        hudAlt.innerText = "8 FT";
+        hudPitch.innerText = "0°";
+        hudPhase.innerText = cfg.enterDoor.label;
+
+        // Animate Doorway Portal Penetration
+        doorwayPortal.style.opacity = Math.min(subP * 2, 1.0);
+        // Expand the doorway frame outward past camera viewport (1.0 -> 3.6x scale)
+        const frameScale = 0.95 + subP * 2.8;
+        doorwayFrame.style.transform = `scale(${frameScale})`;
+        // Swing doors open
+        doorLeft.style.transform = `rotateY(${-subP * 85}deg)`;
+        doorRight.style.transform = `rotateY(${subP * 85}deg)`;
+
+        // Seamlessly reveal luxury interior living room
+        interiorRoom.style.opacity = Math.min(subP * 1.5, 1.0);
+        const interiorScale = 1.15 - subP * 0.12;
+        interiorRoom.style.transform = `scale(${interiorScale})`;
+      }
+      // SCENE 5: Settled Sanctuary (0.94 to 1.0)
+      else {
+        hudAlt.innerText = "5 FT";
+        hudPitch.innerText = "0°";
+        hudPhase.innerText = cfg.settleHero.label;
+        interiorRoom.style.opacity = "1";
+        interiorRoom.style.transform = "scale(1.0)";
+        doorwayPortal.style.opacity = "0";
+      }
+    }
+
+    // Settle camera inside living room and reveal hero headline
+    function settleIntoHero() {
+      if (isFlightComplete) return;
+      isFlightComplete = true;
+
+      if (flightAnimationId) cancelAnimationFrame(flightAnimationId);
+
+      const flightHud = document.getElementById("flight-hud");
+      const progressContainer = document.getElementById("flight-progress-container");
+      const heroContent = document.getElementById("hero-content");
+      const interiorRoom = document.getElementById("interior-living-room");
+      const doorwayPortal = document.getElementById("doorway-portal");
+
+      // Ensure interior is fully settled
+      doorwayPortal.style.opacity = "0";
+      interiorRoom.style.opacity = "1";
+      interiorRoom.style.transform = "scale(1.0)";
+
+      // Fade out HUD
+      flightHud.style.opacity = "0";
+      flightHud.style.pointerEvents = "none";
+      progressContainer.style.opacity = "0";
+
+      // Animate Hero Content entrance
+      if (typeof gsap !== 'undefined') {
+        const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+        tl.to(heroContent, { opacity: 1, y: 0, duration: 1.2 })
+          .fromTo("#hero-title", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, "-=0.8")
+          .fromTo("#hero-subtitle", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 }, "-=0.6")
+          .fromTo("#hero-search", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9 }, "-=0.5");
+      } else {
+        heroContent.style.opacity = "1";
+        heroContent.style.transform = "translateY(0)";
+      }
+    }
+
+    // Skip flight button handler
+    function skipCinematicFlight(instant = false) {
+      const video = document.getElementById("drone-video");
+      if (video) {
+        try { video.pause(); } catch(e){}
+      }
+      settleIntoHero();
+    }
+
+    // Replay flight on demand
+    function replayCinematicFlight() {
+      const heroContent = document.getElementById("hero-content");
+      heroContent.style.opacity = "0";
+      heroContent.style.transform = "translateY(30px)";
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => {
+        startCinematicFlight();
+      }, 400);
+    }
+
+    // --- Statistics Number Increment Animation ---
+    function animateCounters() {
+      const counters = document.querySelectorAll(".stat-number");
+      counters.forEach(counter => {
+        const target = parseFloat(counter.getAttribute("data-target"));
+        const decimals = parseInt(counter.getAttribute("data-decimals") || 0);
+        const duration = 1800;
+        const startTime = performance.now();
+
+        function updateCount(currentTime) {
+          const elapsed = currentTime - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          const easeProgress = 1 - Math.pow(2, -10 * progress);
+          const currentVal = target * easeProgress;
+
+          counter.innerText = currentVal.toFixed(decimals);
+
+          if (progress < 1) {
+            requestAnimationFrame(updateCount);
+          } else {
+            counter.innerText = target.toFixed(decimals);
+          }
+        }
+        requestAnimationFrame(updateCount);
+      });
+    }
+
+    // --- Category Tag Filtering ---
+    function filterTag(type) {
+      document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.classList.remove('active', 'bg-brand-500', 'text-brand-950');
+        btn.classList.add('text-gray-300');
+      });
+      event.target.classList.add('active', 'bg-brand-500', 'text-brand-950');
+      event.target.classList.remove('text-gray-300');
+
+      applyCombinedFilters(type);
+    }
+
+    function filterCards() {
+      applyCombinedFilters();
+    }
+
+    function applyCombinedFilters(forcedTag = null) {
+      let activeTag = forcedTag;
+      if (!activeTag) {
+        const activeBtn = document.querySelector('.category-btn.active');
+        activeTag = activeBtn ? activeBtn.innerText.toLowerCase().replace(' homes', '') : 'all';
+      }
+
+      const loc = document.getElementById('location-filter').value;
+      const type = document.getElementById('type-filter').value;
+      const price = document.getElementById('price-filter').value;
+
+      const cards = document.querySelectorAll('.property-card');
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const cardLoc = card.dataset.location.toLowerCase();
+        const cardType = card.dataset.type.toLowerCase();
+        const cardPrice = parseInt(card.dataset.priceVal);
+
+        let matchTag = (activeTag === 'all' || activeTag === cardType || (activeTag === 'villas' && cardType === 'villa') || (activeTag === 'penthouses' && cardType === 'penthouse'));
+        let matchLoc = (loc === 'all' || cardLoc.includes(loc));
+        let matchType = (type === 'all' || cardType === type);
+        let matchPrice = true;
+
+        if (price === 'under5m') matchPrice = (cardPrice < 5000000);
+        else if (price === '5m10m') matchPrice = (cardPrice >= 5000000 && cardPrice <= 10000000);
+        else if (price === 'over10m') matchPrice = (cardPrice > 10000000);
+
+        if (matchTag && matchLoc && matchType && matchPrice) {
+          card.style.display = 'flex';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      const noResults = document.getElementById('no-results-msg');
+      if (visibleCount === 0) {
+        noResults.classList.remove('hidden');
+      } else {
+        noResults.classList.add('hidden');
+      }
+    }
+
+    function resetFilters() {
+      document.getElementById('location-filter').value = 'all';
+      document.getElementById('type-filter').value = 'all';
+      document.getElementById('price-filter').value = 'all';
+      filterTag('all');
+    }
+
+    // --- Property Gallery Lightbox Modal ---
+    let currentGalleryImages = [];
+    let currentImageIndex = 0;
+    let selectedPropertyTitle = '';
+
+    function openPropertyModal(cardElement) {
+      selectedPropertyTitle = cardElement.dataset.title;
+      document.getElementById('modal-title').innerText = selectedPropertyTitle;
+      document.getElementById('modal-location').innerText = cardElement.dataset.location;
+      document.getElementById('modal-price').innerText = cardElement.dataset.price;
+      document.getElementById('modal-tag').innerText = cardElement.dataset.tag;
+      document.getElementById('modal-desc').innerText = cardElement.dataset.desc;
+      document.getElementById('modal-beds').innerText = cardElement.dataset.beds + ' Beds';
+      document.getElementById('modal-baths').innerText = cardElement.dataset.baths + ' Baths';
+      document.getElementById('modal-sqft').innerText = cardElement.dataset.sqft + ' sq ft';
+
+      const galleryAttr = cardElement.dataset.gallery || cardElement.dataset.img;
+      currentGalleryImages = galleryAttr.split(',');
+      currentImageIndex = 0;
+
+      updateModalImage();
+      renderThumbnails();
+
+      const modal = document.getElementById('property-modal');
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      modal.querySelector('.modal-content').classList.remove('scale-95');
+      modal.querySelector('.modal-content').classList.add('scale-100');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function updateModalImage() {
+      const img = document.getElementById('modal-main-img');
+      img.style.opacity = '0';
+      setTimeout(() => {
+        img.src = currentGalleryImages[currentImageIndex];
+        img.style.opacity = '1';
+      }, 150);
+
+      document.getElementById('modal-img-index').innerText = currentImageIndex + 1;
+      document.getElementById('modal-img-total').innerText = currentGalleryImages.length;
+
+      document.querySelectorAll('.modal-thumb').forEach((thumb, idx) => {
+        if (idx === currentImageIndex) {
+          thumb.classList.add('ring-2', 'ring-brand-500', 'opacity-100');
+          thumb.classList.remove('opacity-60');
+        } else {
+          thumb.classList.remove('ring-2', 'ring-brand-500', 'opacity-100');
+          thumb.classList.add('opacity-60');
+        }
+      });
+    }
+
+    function renderThumbnails() {
+      const container = document.getElementById('modal-thumbnails');
+      container.innerHTML = '';
+      currentGalleryImages.forEach((imgUrl, index) => {
+        const thumb = document.createElement('button');
+        thumb.className = `modal-thumb w-20 h-14 rounded-lg overflow-hidden border border-white/20 transition-all duration-200 flex-shrink-0 ${index === 0 ? 'ring-2 ring-brand-500 opacity-100' : 'opacity-60'}`;
+        thumb.innerHTML = `<img src="${imgUrl}" class="w-full h-full object-cover">`;
+        thumb.onclick = () => {
+          currentImageIndex = index;
+          updateModalImage();
+        };
+        container.appendChild(thumb);
+      });
+    }
+
+    function changeModalImage(delta) {
+      currentImageIndex = (currentImageIndex + delta + currentGalleryImages.length) % currentGalleryImages.length;
+      updateModalImage();
+    }
+
+    function closePropertyModal() {
+      const modal = document.getElementById('property-modal');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      modal.querySelector('.modal-content').classList.remove('scale-100');
+      modal.querySelector('.modal-content').classList.add('scale-95');
+      document.body.style.overflow = '';
+    }
+
+    function bookViewingFromModal() {
+      closePropertyModal();
+      const select = document.getElementById('contact-property-select');
+      if (select) {
+        for (let i = 0; i < select.options.length; i++) {
+          if (select.options[i].text.includes(selectedPropertyTitle) || select.options[i].value.includes(selectedPropertyTitle)) {
+            select.selectedIndex = i;
+            break;
+          }
+        }
+      }
+      setTimeout(() => {
+        const contactSection = document.getElementById('contact');
+        if (contactSection) {
+          contactSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 300);
+    }
+
+    // Keyboard support for modal
+    window.addEventListener('keydown', (e) => {
+      const modal = document.getElementById('property-modal');
+      if (!modal.classList.contains('pointer-events-none')) {
+        if (e.key === 'Escape') closePropertyModal();
+        if (e.key === 'ArrowRight') changeModalImage(1);
+        if (e.key === 'ArrowLeft') changeModalImage(-1);
+      }
+    });
+
+    // --- Form Notification ---
+    function showNotice() {
+      const notice = document.getElementById('notice-box');
+      notice.classList.remove('hidden');
+      setTimeout(() => {
+        notice.classList.add('hidden');
+      }, 7000);
+    }
+  </script>
+
+</body>
+</html>

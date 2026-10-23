@@ -1,0 +1,19 @@
+{
+  "name": "makkar-real-estate",
+  "version": "1.0.0",
+  "description": "Makkar Real Estate - Premium Property Consultants (09877600523)",
+  "main": "index.html",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "makkar-real-estate",
+    "property-consultants",
+    "luxury-homes",
+    "commercial-plots",
+    "villas"
+  ],
+  "author": "Makkar Real Estate",
+  "license": "ISC"
+}
