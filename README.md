@@ -1,6 +1,6 @@
-# Makkar Real Estate Website
+# Luxury Residences Website
 
-Premium Animated Real Estate Showcase for **Makkar Real Estate** (Contact: 09877600523).
+Cinematic Animated Real Estate Showcase for **Luxury Residences**.
 
 ## 🚀 Quick Start
 
@@ -16,7 +16,6 @@ or
 node server.js
 ```
 
-## 📞 Contact Details
-- **Company**: Makkar Real Estate
-- **Phone**: `098776 00523` / `+91 98776 00523`
-- **WhatsApp**: [https://wa.me/919877600523](https://wa.me/919877600523)
+## 📞 Private Inquiries
+- **Advisory**: Private Client Concierge
+- **WhatsApp**: [https://wa.me/](https://wa.me/)
