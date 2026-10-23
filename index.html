@@ -10,6 +10,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
+  <!-- High Priority Image Preloads for Drone Animation -->
+  <link rel="preload" as="image" href="estate_wide.jpg" fetchpriority="high">
+  <link rel="preload" as="image" href="estate_approach.jpg">
+  
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   
@@ -1258,12 +1262,12 @@
   <!-- ============================================================ -->
   <!-- 10. LOCALHOST STATUS PILL -->
   <!-- ============================================================ -->
-  <div class="fixed bottom-4 right-4 z-40 bg-brand-950/90 text-white text-[11px] px-3.5 py-2 rounded-full shadow-2xl backdrop-blur-md border border-brand-500/30 flex items-center gap-2.5">
+  <div id="deployment-status-pill" class="fixed bottom-4 right-4 z-40 bg-brand-950/90 text-white text-[11px] px-3.5 py-2 rounded-full shadow-2xl backdrop-blur-md border border-brand-500/30 flex items-center gap-2.5">
     <span class="relative flex h-2 w-2">
       <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
       <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
     </span>
-    <span class="font-mono text-emerald-400 font-semibold">Localhost 3000 Active</span>
+    <span id="env-status-text" class="font-mono text-emerald-400 font-semibold">Live System Active</span>
   </div>
 
 
@@ -1286,10 +1290,13 @@
       width: 0,
       height: 0,
 
-      // High-Resolution Assets
+      // High-Resolution Assets & 4K Fallback Mirrors
       exteriorImg: null,
       interiorImg: null,
       assetsLoaded: false,
+      isPendingFlight: false,
+      FALLBACK_EXT: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2000&q=85",
+      FALLBACK_INT: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2000&q=85",
 
       // Floating Ambient Gold Dust Particles
       particles: [],
@@ -1337,30 +1344,45 @@
           });
         }
 
-        // Preload High-Res Real Estate Assets
-        let loadedCount = 0;
-        const checkDone = () => {
-          loadedCount++;
-          if (loadedCount >= 2) {
+        // Preload High-Res Real Estate Assets with fallback
+        const onAssetReady = () => {
+          if (this.exteriorImg && this.exteriorImg.complete && this.exteriorImg.naturalWidth > 0) {
             this.assetsLoaded = true;
-            if (this.testFlightTime !== null) {
+            if (this.isPendingFlight) {
+              this.isPendingFlight = false;
+              this.executeFlight();
+            } else if (this.testFlightTime !== null) {
               this.renderFrame(this.testFlightTime);
+            } else if (!this.isComplete) {
+              this.renderFrame(0);
             }
           }
         };
 
         this.exteriorImg = new Image();
-        this.exteriorImg.onload = checkDone;
+        this.exteriorImg.onload = onAssetReady;
+        this.exteriorImg.onerror = () => {
+          if (this.exteriorImg.src !== this.FALLBACK_EXT) {
+            console.warn("Local exterior asset failed, falling back to CDN asset...");
+            this.exteriorImg.src = this.FALLBACK_EXT;
+          }
+        };
         this.exteriorImg.src = "estate_wide.jpg";
 
         this.interiorImg = new Image();
-        this.interiorImg.onload = checkDone;
+        this.interiorImg.onload = onAssetReady;
+        this.interiorImg.onerror = () => {
+          if (this.interiorImg.src !== this.FALLBACK_INT) {
+            console.warn("Local interior asset failed, falling back to CDN asset...");
+            this.interiorImg.src = this.FALLBACK_INT;
+          }
+        };
         this.interiorImg.src = "estate_approach.jpg";
 
-        // Handle immediate cache
-        if (this.exteriorImg.complete) loadedCount++;
-        if (this.interiorImg.complete) loadedCount++;
-        if (loadedCount >= 2) this.assetsLoaded = true;
+        // Check if cached immediately
+        if (this.exteriorImg.complete && this.exteriorImg.naturalWidth > 0) {
+          onAssetReady();
+        }
 
         window.addEventListener("resize", () => this.onWindowResize(), { passive: true });
         this.isInitialized = true;
@@ -1648,6 +1670,14 @@
         }
 
         // Floating Gold Dust Sunlight Particles
+        this.renderParticles(timeSec, p);
+      },
+
+      renderParticles(timeSec, p) {
+        if (!this.ctx || !this.width || !this.height) return;
+        const ctx = this.ctx;
+        const W = this.width;
+        const H = this.height;
         ctx.save();
         for (let i = 0; i < this.particles.length; i++) {
           const pt = this.particles[i];
@@ -1706,6 +1736,9 @@
 
         // Seamlessly blend in the 4K crisp living room overlay
         if (interiorRoom) {
+          if (this.interiorImg && this.interiorImg.src) {
+            interiorRoom.style.backgroundImage = `url("${this.interiorImg.src}")`;
+          }
           interiorRoom.style.opacity = "1";
         }
 
@@ -1777,6 +1810,40 @@
           return;
         }
 
+        // Readiness Gate: If exterior asset is downloading, hold flight clock until ready
+        if (!this.exteriorImg || !this.exteriorImg.complete || this.exteriorImg.naturalWidth === 0) {
+          this.isPendingFlight = true;
+          this.updateHUD("INITIALIZING", "LOCKING", "ESTABLISHING SATELLITE TELEMETRY...", 0.05);
+
+          // Render standby background with floating particles
+          const standbyTick = () => {
+            if (!this.isPendingFlight) return;
+            if (this.ctx && this.width && this.height) {
+              this.ctx.fillStyle = "#07090e";
+              this.ctx.fillRect(0, 0, this.width, this.height);
+              this.renderParticles(performance.now() / 1000, 0);
+            }
+            this.animId = requestAnimationFrame(standbyTick);
+          };
+          this.animId = requestAnimationFrame(standbyTick);
+
+          // 3-second failsafe in case of extremely slow network
+          setTimeout(() => {
+            if (this.isPendingFlight) {
+              this.isPendingFlight = false;
+              this.executeFlight();
+            }
+          }, 3000);
+          return;
+        }
+
+        this.executeFlight();
+      },
+
+      executeFlight() {
+        if (this.animId) cancelAnimationFrame(this.animId);
+        this.renderFrame(0);
+
         const startTimestamp = performance.now();
 
         const tick = (now) => {
@@ -1830,8 +1897,8 @@
       FlightEngine.replay();
     }
 
-    // Initialize Flight Engine on DOM Load
-    document.addEventListener("DOMContentLoaded", () => {
+    // Initialize Flight Engine on DOM Load (with immediate fallback if already ready)
+    function initApp() {
       FlightEngine.init();
 
       // Only skip if explicitly requested via url ?reduced=1, otherwise always play flight
@@ -1869,15 +1936,17 @@
 
       // Header blur on scroll
       const header = document.getElementById("main-header");
-      window.addEventListener("scroll", () => {
-        if (window.scrollY > 50) {
-          header.classList.add("glass-dark", "py-4", "shadow-xl");
-          header.classList.remove("py-6");
-        } else {
-          header.classList.remove("glass-dark", "py-4", "shadow-xl");
-          header.classList.add("py-6");
-        }
-      }, { passive: true });
+      if (header) {
+        window.addEventListener("scroll", () => {
+          if (window.scrollY > 50) {
+            header.classList.add("glass-dark", "py-4", "shadow-xl");
+            header.classList.remove("py-6");
+          } else {
+            header.classList.remove("glass-dark", "py-4", "shadow-xl");
+            header.classList.add("py-6");
+          }
+        }, { passive: true });
+      }
 
       // Mobile Menu
       const mobileBtn = document.getElementById("mobile-menu-btn");
@@ -1885,30 +1954,48 @@
       const menuIconOpen = document.getElementById("menu-icon-open");
       const menuIconClose = document.getElementById("menu-icon-close");
 
-      mobileBtn.addEventListener("click", () => {
-        const isOpen = !mobileMenu.classList.contains("opacity-0");
-        if (isOpen) {
-          mobileMenu.classList.add("opacity-0", "pointer-events-none");
-          menuIconOpen.classList.remove("hidden");
-          menuIconClose.classList.add("hidden");
-          document.body.style.overflow = "";
-        } else {
-          mobileMenu.classList.remove("opacity-0", "pointer-events-none");
-          menuIconOpen.classList.add("hidden");
-          menuIconClose.classList.remove("hidden");
-          document.body.style.overflow = "hidden";
-        }
-      });
-
-      document.querySelectorAll(".mobile-nav-link").forEach(link => {
-        link.addEventListener("click", () => {
-          mobileMenu.classList.add("opacity-0", "pointer-events-none");
-          menuIconOpen.classList.remove("hidden");
-          menuIconClose.classList.add("hidden");
-          document.body.style.overflow = "";
+      if (mobileBtn && mobileMenu && menuIconOpen && menuIconClose) {
+        mobileBtn.addEventListener("click", () => {
+          const isOpen = !mobileMenu.classList.contains("opacity-0");
+          if (isOpen) {
+            mobileMenu.classList.add("opacity-0", "pointer-events-none");
+            menuIconOpen.classList.remove("hidden");
+            menuIconClose.classList.add("hidden");
+            document.body.style.overflow = "";
+          } else {
+            mobileMenu.classList.remove("opacity-0", "pointer-events-none");
+            menuIconOpen.classList.add("hidden");
+            menuIconClose.classList.remove("hidden");
+            document.body.style.overflow = "hidden";
+          }
         });
-      });
-    });
+
+        document.querySelectorAll(".mobile-nav-link").forEach(link => {
+          link.addEventListener("click", () => {
+            mobileMenu.classList.add("opacity-0", "pointer-events-none");
+            menuIconOpen.classList.remove("hidden");
+            menuIconClose.classList.add("hidden");
+            document.body.style.overflow = "";
+          });
+        });
+      }
+
+      // Update environment status pill
+      const envText = document.getElementById("env-status-text");
+      if (envText) {
+        if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
+          envText.innerText = "Localhost Active";
+        } else {
+          envText.innerText = "Verified Live System";
+        }
+      }
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initApp);
+    } else {
+      initApp();
+    }
 
     // --- Statistics Number Increment Animation ---
     function animateCounters() {
